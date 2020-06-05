@@ -8,7 +8,7 @@
 	if (mysqli_num_rows($result))
 	{
 		$ret=array('code'=>'201');  //先查询是否有这么一条数据  有说明已经选过
-		echo json_encode($ret);
+		$log_state='error:have chosen';
 	}
 	else{
 		$sql1="select class_name ,class_teacher from classes where class_id=$class_num";
@@ -27,10 +27,18 @@
 		$result3=mysqli_query($con,$sql3);
 		if($result2){
 			$ret=array('code'=>'200');  //选课成功
-			echo json_encode($ret);
+			$log_state='sueecss';
 		}
 		else{
 		$ret=array('code'=>'202');  //选课失败
-		echo json_encode($ret);
+		$log_state='error:select wrong(mysql)';
 		}
 	}
+
+	$log_time=date("Y-m-d h:i:sa");
+	$log_content=$stu_id.':try selsct class'.$class_num;
+	$sql="insert into log (log_time,log_content,log_state) values ('$log_time','$log_content','$log_state')";
+	$result=mysqli_query($con,$sql);
+
+echo json_encode($ret);
+?>

@@ -101,18 +101,33 @@ var app=new Vue ({
             user_type:"",     //用户类型
             user_token:"",    //token
             class_id:"",      //班级名
+            system_time:"",   //时间
         },
 
+    	my_work_info:{ //下载我的提交
+                user_id:"",       //账号
+    	        user_name:"",     //姓名
+    	        class_work_name:"",//作业名
+                class_id:"",     //班级id
+                save_way:"",     //作业存储方式
+                file_name:"",     //我的作业的名字
+    	},	
+
         class_info:{ //作业信息
-            class_id:"",
+            class_id:"",       //班级id
             class_work_name:"",//作业名
-            class_work_type:"",//作业类型
+            class_work_name_form:"",//作业的名字格式
             class_work_size:"",//作业大小限制
             class_work_deadline:"",//作业时间限制
             class_note:"",
+            class_work_type:[],//作业类型
+            class_work_file_type:[], //作业的文件存放方式
         },
 
+        class_type_number:0,//作业类型数
         upload_confirm: false,
+        class_type_number_int:[], //用来计算每次的作业类型数
+        class_work_type_str:"", //用于展示的作业类型字符串
 
         work_upload_info:{
             action:"upload_work",   //行为
@@ -202,19 +217,39 @@ var app=new Vue ({
             window.location.href='index.html';
         },
 
-   /*     computeClasses:function(){  //计算当前的可选课程
-            var i = 0;
-            for(i = 0; i < this.classes.allClasses.length ; i ++)
-                {
-                    if(this.classes.myClasses.include(this.classes.allClasses[i]))
-                    {
-                        continue;
-                    }
-                    else
-                    this.classes.selectiveClasses.push(this.classes.allClasses[i]);
-                }
-        },
+	get_my_work:function(file_type,upload_type){ //0正常提交 1补交
+		if(upload_type==1)
+		this.my_work_info.save_way=2;
+		else
+		this.my_work_info.save_way=this.class_info.class_work_file_type[this.class_info.class_work_type.indexOf(file_type)];
+		this.my_work_info.user_name=this.user_info.user_name;
+		this.my_work_info.user_id=this.user_info.user_id;
+		this.my_work_info.class_id=this.class_info.class_id;
+		this.my_work_info.class_work_name=this.class_info.class_work_name;
+      //  this.my_work_info.save_way=this.class_info.class_work_file_type[this.class_info.class_work_type.indexOf(file_type)];
+        this.my_work_info.file_name=this.class_info.class_work_name_form;
+        this.my_work_info.file_type=file_type;
+                this.$http.post(backend + "get_my_work.php",this.my_work_info, {emulateJSON:true}).then(function(res){
+            		var dataret = JSON.parse(res.bodyText);
+            		if (dataret.code == 200)
+            		{
+                		window.open(dataret.url);
+            		}
+            		else
+            		{
+        				if(dataret.code ==201)
+        				alert("无法移动文件!");
+        				else 
+                		alert("未找到文件!");
+            			}
+        			},function(res){
+            				alert("无法查看(Unknown Reason)");
+        			});
 
+	},
+
+	
+   /*    
         get_student_work:function(){
  
         // 发送 token 到服务端获取登录信息
@@ -293,6 +328,15 @@ var app=new Vue ({
 
 
         new_work:function(){
+                    console.log(this.class_info.class_work_file_type);
+                    var i=0; //将是否换成0,1存储
+                    for(;i<this.class_info.class_work_file_type.length;++i){
+                        if(this.class_info.class_work_file_type[i]=='是')
+                            this.class_info.class_work_file_type[i]=1;
+                        else
+                            this.class_info.class_work_file_type[i]=0;
+                    }
+
                     this.class_info.class_id=this.class_info.class_id.split("-")[0];
                     this.$http.post(backend + "work.php",this.class_info, {emulateJSON:true}).then(function(res){
                     var dataret = JSON.parse(res.bodyText);
@@ -412,7 +456,7 @@ var app=new Vue ({
                 var dataret = JSON.parse(res.bodyText);
                 if (dataret.code == 200)
                 {
-                    window.location.href="http://ashinz.cn/nuaa/"+dataret.url;
+                    window.location.href=dataret.url;
                 }
                 else
                     {
@@ -506,7 +550,8 @@ var app=new Vue ({
                 },function(res){
                     alert("修改失败(unknown error)");
                 });
-            },       
+            },    
+
         upload_repent:function(){
            
             var file_info = $( '#file_selected_repent')[0].files[0];
@@ -531,6 +576,9 @@ var app=new Vue ({
             form_data.append('class_id',this.user_info.class_id);
             form_data.append('upload_type','repent');
             form_data.append('file', file_info);
+	    form_data.append('upload_type',this.work_upload_info.upload_type);
+            form_data.append('save_way','0');
+
             var xhrOnProgress = function (fun) {
                 xhrOnProgress.onprogress = fun; //绑定监听
                 //使用闭包实现监听绑
@@ -573,6 +621,25 @@ var app=new Vue ({
             });
         },
 
+        get_time:function(){
+            this.$http.get(backend + "time.php", {emulateJSON:true}).then(function(res){
+                //console.log(res.bodyText);
+                var dataret = JSON.parse(res.bodyText);
+                if (dataret.code == 200)
+                {
+
+                    this.user_info.system_time= dataret.time;
+                }
+                else
+                {
+                    alert("当前系统时间有误，暂停提交");
+                }
+            },function(res){
+                alert("无法查询(Unknown Reason)");
+            });
+        },
+
+
         upload_file:function(){
             if (this.upload_confirm != true)
             {
@@ -580,26 +647,22 @@ var app=new Vue ({
                 return;
             }
             var expire_time = (new Date(this.class_info.class_work_deadline)).getTime();
-            var timestamp = (new Date()).getTime();
-            if (timestamp > expire_time&&this.work_upload_info.upload_type!='abnormal')
+            var timestamp = (new Date(this.user_info.system_time)).getTime();
+            if (timestamp > expire_time+6*3600*1000)//超时六小时
             {
-                alert('本次提交已经截止，若未超过补交时间，请及时补交！');
+                alert('本次提交已经截止');
                 return;
             }
-            if(this.work_upload_info.upload_type=='abnormal'){
-                if(timestamp < expire_time)
-                {
-                    alert("未到补交时间段！");
-                    return ;
-                }
-                if(timestamp-expire_time>6*60*60*1000){
-                    alert("超过补交时间，无法提交！");
-                    return;
-                }
-                if(timestamp-expire_time<3*60*60*1000)
-                {
-                    this.work_upload_info.upload_type='abnormal3';//三小时内补交
-                }
+            else if(timestamp >= expire_time+3*3600*1000){//3-6小时
+                alert("超时3-6小时");
+                this.work_upload_info.upload_type='abnormal6';
+            }
+            else if(timestamp >= expire_time){//超时三小时内
+                alert("超时0-3小时");
+                this.work_upload_info.upload_type='abnormal3';
+            }
+            else {
+                this.work_upload_info.upload_type='normal';
             }
             var file_info = $( '#file_selected')[0].files[0];
             if (file_info == undefined){
@@ -610,16 +673,10 @@ var app=new Vue ({
             //var re = this.submit_modal_data.pattern;
             // 判断文件后缀名
             var ext = file_info.name.substr(file_info.name.lastIndexOf(".")).toLowerCase().split(".")[1];
-	    if(ext!='pdf'&&ext!='md'){
-		alert("请提交pdf或md格式文件!");
-		return ;
+    	    if(this.class_info.class_work_type.indexOf(ext)==-1){
+    		alert("请提交指定格式的文件！");
+    		return ;
 	        }
-
-          /*  if (ext != this.class_info.class_work_type)
-            {
-                alert('文件格式不正确:[' + ext + ']vs.[' + this.class_info.class_work_type + ']');
-                return;
-            }*/
             // 判断文件大小
             if (file_info.size > this.class_info.class_work_size*1024*1024)
             {
@@ -629,14 +686,15 @@ var app=new Vue ({
             this.work_upload_info.work_name=this.class_info.class_work_name;
             this.work_upload_info.work_type=this.class_info.class_work_type;
             var form_data = new FormData();
-            var time=this.getdate();
             form_data.append('user_name', this.user_info.user_name);
             form_data.append('user_id', this.user_info.user_id);
-            form_data.append('work_name',this.work_upload_info.work_name);
+            form_data.append('work_name',this.work_upload_info.work_name);  //提交的文件名
+            form_data.append('work_personal_name',this.class_info.class_work_name_form); //个人提交的作业名
             form_data.append('work_type',ext);
-            form_data.append('work_time',time);
+            form_data.append('work_time',this.user_info.system_time);
             form_data.append('class_id',this.user_info.class_id);
             form_data.append('upload_type',this.work_upload_info.upload_type);
+            form_data.append('save_way',this.class_info.class_work_file_type[this.class_info.class_work_type.indexOf(ext)]);
             form_data.append('file', file_info);
             var xhrOnProgress = function (fun) {
                 xhrOnProgress.onprogress = fun; //绑定监听
@@ -732,11 +790,17 @@ var app=new Vue ({
                     if(x=='student_class_login'){
                         this.class_info.class_id=this.auto_login_info.class_id;
                         this.class_info.class_work_name=dataret.class_work_name;
+                        this.class_info.class_work_name_form=dataret.class_work_name_form.replace("$i",this.user_info.user_id).replace("$s",this.user_info.user_name).replace("$f",dataret.class_work_name);
                         this.class_info.class_work_deadline=dataret.class_work_deadline;
                         this.class_info.class_work_size=dataret.class_work_size;
-                        this.class_info.class_work_type=dataret.class_work_type;
+                        this.class_info.class_work_type=dataret.class_work_type.split("+");
+                        this.class_info.class_work_file_type=dataret.class_work_file_type.split("+");
                         this.class_info.class_note=dataret.class_note;
                         this.user_info.class_id=this.auto_login_info.class_id;
+                        while(dataret.class_work_type.indexOf("+")!=-1){
+                        	dataret.class_work_type=dataret.class_work_type.replace("+","、");
+                        }
+                        this.class_work_type_str=dataret.class_work_type;
                     }
 
 
@@ -846,10 +910,29 @@ var app=new Vue ({
                 this.auto_login(web_url);
             }
         },
+
+
+        test:function(){
+        	alert("系统维护中。请勿提交！");
+        },
+
     },
 
+    watch:{
+        class_type_number:function(newVal,oldVal){
+            this.class_type_number_int=[];
+            this.class_info.class_work_type=[];
+            this.class_info.class_work_file_type=[];
+            var i=0;
+            for(;i<newVal;++i){
+                this.class_type_number_int.push(i);
+            }
+        }
+    },
 
     created:function(){
+	//	this.test();
         this.web_type_init(this.check_login_status());
     },
+
 })

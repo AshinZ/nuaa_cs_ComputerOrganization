@@ -30,7 +30,7 @@
 
 	}
 	else {
-	$path=$work_name.'(repent)'; //上次作业的文件夹
+	$path=$work_name.'/'.$work_name.'(repent)'; //上次作业的文件夹
 	$path=iconv("UTF-8","GBK",$path);
 
 
