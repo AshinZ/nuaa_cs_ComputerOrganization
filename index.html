@@ -1,0 +1,1049 @@
+<!DOCTYPE html>
+<html>
+    <head>
+    	<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+        <meta charset="UTF-8">
+        <title>test</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+   		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <script src="js/vue.min.js"></script>
+        <script src="js/vue-resource.min.js"></script>
+        <link rel="stylesheet" href="css/bootstrap.css" media="screen">
+        <link rel="stylesheet" href="skins/eden.css" media="screen">
+        <link href="css/animate.css" rel="stylesheet">
+        <style>
+
+            .navbar-holder-dark {
+                padding: 20px 20px 200px 20px;
+                background: #333333;
+            }
+            .middle {
+            	width:40%;
+
+            	height:50%;
+
+                text-align: center;
+
+                background-color: #fff;
+
+                border-radius: 20px;
+
+                position: absolute;
+
+                left: 50%;
+
+                top: 50%;
+
+                transform: translate(-50%,-50%);
+            }
+            .row {
+                text-align: center;
+
+                background-color: #fff;
+
+                height: 100px;
+
+                width: 100%;
+
+                position: absolute;
+
+                top: 800px;
+
+                left: 50%;
+
+                transform: translate(-50%, -50%);
+
+            }
+            </style>
+    </head>
+
+    <body>
+        <div id="app" ><!-- 以下为页面的主体部分 -->
+            <div v-if="webtype=='login'">  
+            	<!--登陆部分-->
+				<!-- 上部展示条 -->
+    			<div class="navbar navbar-default navbar-fixed-top">
+        			<div class="container">
+            			<div class="navbar-collapse collapse" id="navbar-main">
+            				<ul class="nav navbar-nav navbar-left">
+		        			<li><a  href="javascript:void(0)">Test</a></li>
+                			</ul>
+                			<ul class="nav navbar-nav navbar-right">
+		        			<li><a  href="javascript:void(0)" data-toggle="modal" data-target="#modal_reg">注册</a></li>
+                			</ul>
+           				</div>
+       				 </div>
+    			</div>
+
+
+
+                <div id="container">
+    				<div class="middle">
+                    	<form class="form-horizontal">
+                    		<div class="modal-body">
+                    		<div class="form-group">
+                     		    <label for="inputEmail" class="col-lg-3 control-label">学号</label>
+                       				<div class="col-lg-9">
+                          				<input class="form-control" placeholder="请输入学号..." type="text" v-model="login_data.user_id"  maxlength="9">
+                       			 	</div>
+                  			</div>
+                    		<div class="form-group">
+                       			<label for="inputEmail" class="col-lg-3 control-label">密码</label>
+                        			<div class="col-lg-9">
+                           				<input class="form-control" placeholder="请输入密码..." type="password" v-model="login_data.user_passwd" maxlength="16">
+                        			</div>
+                    		</div>
+                   			<input type="radio" id="teacher" value="teacher" v-model="login_data.user_type">
+                   			<label for="teacher">教师登陆</label>
+                   			<input type="radio" id="student" value="student" v-model="login_data.user_type">
+                   			<label for="student">学生登陆</label>
+                   			<p>Cookie 声明：本站必须使用一个 cookie，用于管理登录状态，禁用将导致无法登录</p>
+                			</div>
+                			<div class="modal-footer">
+                    			<p>
+                        			<button  text-align:center  type="button" class="btn btn-primary" @click="login">登录</button>
+                    			</p>
+                			</div>
+            			</form>
+        			</div>
+    			</div>
+
+				<!--注册开始-->
+				<div class="modal fade" id="modal_reg" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	    			<div class="modal-dialog">
+	        			<div class="modal-content">
+	            			<div class="modal-header">
+	                			<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+	                			<h4 class="modal-title" id="myModalLabel">注册</h4>
+	            			</div>
+	           			 	<form class="form-horizontal">
+	                			<div class="modal-body">
+	                    			<div class="form-group">
+	                        			<label for="inputEmail" class="col-lg-3 control-label">学号</label>
+	                        			<div class="col-lg-9">
+	                            			<input class="form-control" placeholder="请输入学号..." type="text"  maxlength="9" v-model="register_data.user_id">
+	                       				 </div>
+	                    			</div>
+	                    			<div class="form-group">
+				                        <label for="inputEmail" class="col-lg-3 control-label">姓名</label>
+				                        <div class="col-lg-9">
+				                            <input class="form-control" placeholder="请输入姓名..." type="text"  maxlength="8" v-model="register_data.user_name">
+				                        </div>
+				                    </div>
+				                    <div class="form-group">
+				                        <label for="inputEmail" class="col-lg-3 control-label">班级</label>
+				                        <div class="col-lg-9">
+				                            <input class="form-control" placeholder="请输入班级..." type="text"  maxlength="7" v-model="register_data.user_class">
+				                        </div>
+				                    </div>
+				                    <div class="form-group">
+				                        <label for="inputEmail" class="col-lg-3 control-label">密码</label>
+				                        <div class="col-lg-9">
+				                            <input class="form-control" placeholder="请输入密码..." type="password" maxlength="16" v-model="register_data.user_passwd">
+	                       				</div>
+	                   				</div>
+				                    <div class="form-group">
+				                        <label for="inputEmail" class="col-lg-3 control-label">确认密码</label>
+				                        <div class="col-lg-9">
+				                            <input class="form-control" placeholder="请再次输入密码..." type="password"  maxlength="16" v-model="passwd_confirm">
+				                        </div>
+				                    </div>
+				                    <div class="form-group">
+				                        <label for="inputEmail" class="col-lg-3 control-label">E-mail</label>
+				                        <div class="col-lg-9">
+				                            <input class="form-control" placeholder="请输入邮箱..." type="text"  maxlength="30" v-model="register_data.user_mail">
+				                        </div>
+				                    </div>
+				                    <p>提示：密码只允许出现大小写字母、数字和下划线。</p>
+				                </div>
+				                <div class="modal-footer">
+				                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+				                    <button type="button" class="btn btn-primary" @click="register">注册</button>
+				                </div>
+				            </form>
+				        </div>
+				    </div>
+				</div>
+				<!--注册结束-->
+			</div>
+
+
+
+
+
+
+			<div v-else-if="webtype=='teacher_login'"> <!--教师登陆成功界面-->
+				<nav class="navbar navbar-default">
+				  <div class="container-fluid">
+				    <!-- Brand and toggle get grouped for better mobile display -->
+				    <!--
+				    <div class="navbar-header">
+				      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+				        <span class="sr-only">Toggle navigation</span>
+				        <span class="icon-bar"></span>
+				        <span class="icon-bar"></span>
+				        <span class="icon-bar"></span>
+				      </button>
+				      <a class="navbar-brand" href="index.html">主页</a>
+				    </div>
+					-->
+
+				    <!-- Collect the nav links, forms, and other content for toggling -->
+				    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+				      <ul class="nav navbar-nav">
+				        <li><a  href="javascript:void(0)" data-toggle="modal" data-target="#modal_new_class">建立新班级</a></li>
+				<!--        <li><a  href="javascript:void(0)" data-toggle="modal" data-target="#modal_download_work" @click="get_student_work">下载作业</a></li> -->
+				        <li class="dropdown">
+				          <a  class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">更多 <span class="caret"></span></a>
+				          <ul class="dropdown-menu" >
+				            <li><a  href="javascript:void(0)" data-toggle="modal" data-target="#modal_new_note" >发布新公告</a></li>
+				            <li><a  href="javascript:void(0)" data-toggle="modal" data-target="#modal_new_work" >发布新作业</a></li>
+				            <li><a  href="javascript:void(0)" data-toggle="modal" data-target="#modal_upload_resourse" >上传资源</a></li>
+				            <li><a  href="javascript:void(0)" data-toggle="modal" data-target="#modal_upload_grade">上传成绩</a></li>
+				          </ul>
+				        </li>
+				      </ul>
+				      <ul class="nav navbar-nav navbar-right">
+				        <li class="dropdown">
+				          <a class="dropdown-toggle" data-toggle="dropdown"  aria-haspopup="true" aria-expanded="false">{{ user_info.user_name }}<span class="caret"></span></a>
+				          <ul class="dropdown-menu">
+				            <li role="separator" class="divider"></li>
+				            <li><a href="javascript:void(0);" id="log_out" @click="log_out">退出登录</a></li>
+				          </ul>
+				        </li>
+				      </ul>
+				    </div><!-- /.navbar-collapse -->
+				  </div><!-- /.container-fluid -->
+				</nav>
+
+
+
+				<div class="middle">
+				    <div  v-if="classes.myClasses.length=='0'">
+				        <p>尚未发布课程</p>
+				    </div>
+				    <div v-else>
+				      <p>我的课程</p>
+				        <div>
+				            <table class="table table-hover table-bordered table-responsive">
+				                    <thead style="text-align:center">
+				                    	<tr>
+				                        <th width="20%">课程号</th>
+				                        <th width="20%">课程名</th>
+				                        <th width="20%">选课人数</th>
+				                        <th width="20%">当前作业名</th>
+				                        <th width="20%">当前作业已提交人数</th>
+				                        <th width="20%">下载作业</th>
+				                        <th width="20%">下载忏悔</th>
+				                    	</tr>
+				                    </thead>
+				                    <tbody v-for="(value,key) in classes.myClasses">
+				                        <tr>
+				                            <td style="text-align: center; font-weight:bold;">{{ value[0] }}</td>
+				                            <td style="text-align: center;">{{ value[1] }}</td>
+				                            <td style="text-align:center;">{{ value[2] }}</td>
+				                            <td style="text-align:center;">{{ value[4] }}</td>
+				                            <td style="text-align:center;">{{ value[3] }}</td>
+				                            <td style="text-align:center;">
+				                                <a type=button class="btn btn-primary" @click="download(value[0],value[4],1)">下载</a> 
+				                            </td>
+				                            <td style="text-align:center;">
+				                                <a type=button class="btn btn-primary" @click="download(value[0],value[6],2)">下载</a> 
+				                            </td>
+				                        </tr>
+				                    </tbody>
+				            </table>
+				        </div>
+				    </div>
+				</div>
+
+
+
+
+
+
+
+
+
+
+
+
+				<!--发布公告-->
+				<div class="modal fade" id="modal_new_note" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+				    <div class="modal-dialog">
+				        <div class="modal-content">
+				            <div class="modal-header">
+				                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				                <h4 class="modal-title" id="myModalLabel">发布新公告</h4>
+				            </div>
+				            <form class="form-horizontal">
+				                <div class="modal-body">
+				                    <div class="form-group">
+				                        <label  class="col-lg-3 control-label">公告正文</label>
+				                        <div class="col-lg-9">
+				                            <textarea    class="col-lg-9" rows="3" placeholder="请输入内容..."  type="text"  maxlength="1024"  v-model="teacherNew.new_note"> </textarea>
+				                        </div>
+				                    </div>
+				                    <div class="form-group">
+				                        <label  class="col-lg-3 control-label">班级</label>
+				                        <div class="col-lg-9">
+				                        	<select class="form-control"  v-model="teacherNew.class_id">
+									        <option disabled value="">请选择</option>
+									        <option v-for="(value,key) in classes.myClasses">{{ value[0]+'-'+value[1] }}</option>
+									      </select>
+									    </div>
+									</div>
+				                </div>
+				                    <div class="modal-footer">
+				                        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+				                        <button type="button" class="btn btn-primary" @click="new_note">发布</button>
+				                     </div>
+				                </form>
+				        </div>
+				    </div>
+				</div>
+
+				<!--发布新作业-->
+				<div class="modal fade" id="modal_new_work" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+				    <div class="modal-dialog">
+				        <div class="modal-content">
+				            <div class="modal-header">
+				                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				                <h4 class="modal-title" id="myModalLabel">发布新作业</h4>
+				            </div>
+				            <form class="form-horizontal">
+				                <div class="modal-body">
+				                    <div class="form-group">
+				                        <label for="inputEmail" class="col-lg-3 control-label">作业名</label>
+				                        <div class="col-lg-9">
+				                            <input class="form-control" placeholder="请输入作业名..." type="text" v-model="class_info.class_work_name" maxlength="9">
+				                        </div>
+				                    </div>
+				              <!--      <div class="form-group">
+				                        <label for="inputEmail" class="col-lg-3 control-label">作业文件类型</label>
+				                        <div class="col-lg-9">
+				                            <input class="form-control" placeholder="请输入作业文件类型..." type="text"  maxlength="9" v-model="class_info.class_work_type">
+				                        </div>
+				                    </div>-->
+				                    <div class="form-group">
+				                        <label for="inputEmail" class="col-lg-3 control-label">作业大小(M)</label>
+				                        <div class="col-lg-9">
+				                            <input class="form-control" placeholder="请输入作业大小..." type="text"  maxlength="9" v-model="class_info.class_work_size">
+				                        </div>
+				                    </div>
+				                    <div class="form-group">
+				                        <label for="inputEmail" class="col-lg-3 control-label">截止日期</label>
+				                        <div class="col-lg-9">
+				                            <input class="form-control" placeholder="请输入截止日期(格式 2021-1-1 0:00:00)" type="text"  maxlength="20" 
+				                            v-model="class_info.class_work_deadline">
+				                        </div>
+				                    </div>
+				                    <div class="form-group">
+				                        <label  class="col-lg-3 control-label">班级</label>
+				                        <div class="col-lg-9">
+				                        	<select  class="form-control"  v-model="class_info.class_id">
+									        <option  disabled value="">请选择</option>
+									        <option  v-for="(value,key) in classes.myClasses">{{ value[0]+'-'+value[1] }}</option>
+									      </select>
+									    </div>
+									</div>
+				                </div>
+				                    <div class="modal-footer">
+				                        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+				                        <button type="button" class="btn btn-primary" @click="new_work">发布</button>
+				                    </div>
+				            </form>
+				        </div>
+				    </div>
+				</div>
+
+				<!--发布新班级-->
+				<div class="modal fade" id="modal_new_class" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+				    <div class="modal-dialog">
+				        <div class="modal-content">
+				            <div class="modal-header">
+				                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				                <h4 class="modal-title" id="myModalLabel">建立新班级</h4>
+				            </div>
+				            <form class="form-horizontal">
+				                <div class="modal-body">
+				                    <div class="form-group">
+				                        <label for="inputEmail" class="col-lg-3 control-label">班级名</label>
+				                        <div class="col-lg-9">
+				                            <input class="form-control" placeholder="请输入班级名..." type="text"   maxlength="20"
+				                            v-model="teacherNew.new_class_name">
+				                        </div>
+				                    </div>
+				                </div>
+				                    <div class="modal-footer">
+				                        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+				                        <button type="button" class="btn btn-primary" @click="new_class">建立</button>
+				                    </div>
+				            </form>
+				        </div>
+				    </div>
+				</div>
+
+				<!--上传成绩-->
+				<div class="modal fade" id="modal_upload_grade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+				    <div class="modal-dialog">
+				        <div class="modal-content">
+				            <div class="modal-header">
+				                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				                <h4 class="modal-title" id="myModalLabel">上传成绩(no)</h4>
+				            </div>
+				            <form class="form-horizontal">
+				            	<div class="form-group">
+				                        <label  class="col-lg-3 control-label">班级</label>
+				                        <div class="col-lg-9">
+				                        	<select class="form-control"  v-model="teacherNew.class_id">
+									        <option disabled value="">请选择</option>
+									        <option v-for="(value,key) in classes.myClasses">{{ value[0]+'-'+value[1] }}</option>
+									      </select>
+									    </div>
+								</div>
+				                <div class="form-group">
+				                        <label for="inputEmail" class="col-lg-3 control-label">请选择作业文件</label>
+				                        <div class="col-lg-9">
+				                            <input class="form-control" id="file_selected1" type="file" name="file_selected1">
+				                        </div>
+				                        <p style="text-align: center;">上传格式仅为xls 如果为xlsx请另存为xls</p>
+				                        <p style="text-align: center">第一列为学号 第二列为成绩 文件名为作业名 会自动解析</p>
+				                </div>
+
+				                    <div class="modal-footer">
+				                        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+				                        <button type="button" class="btn btn-primary">上传</button>
+				                    </div>
+				                    <div class="bs-component well well-sm">
+				                        <p style="  ">上传进度： <label id="upload_prog_size">0 / 0 </label> (bytes)</p>
+				                        <div class="progress progress-striped active">
+				                            <div id="upload_prog_bar" class="progress-bar progress-bar-success" style="width: 0%"></div>
+				                            <p id="upload_prog_per">0%</p>
+				                        </div>
+				                    </div>
+				            </form>
+				        </div>
+				    </div>
+				</div>
+
+				<!--上传学习资料-->
+				<div class="modal fade" id="modal_upload_resourse" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+				     <div class="modal-dialog">
+				        <div class="modal-content">
+				            <div class="modal-header">
+				                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				                <h4 class="modal-title" id="myModalLabel">上传资料(no)</h4>
+				            </div>
+				            <form class="form-horizontal">
+				            	<div class="form-group">
+				                        <label  class="col-lg-3 control-label">班级</label>
+				                        <div class="col-lg-9">
+				                        	<select class="form-control"  v-model="teacherNew.class_id">
+									        <option disabled value="">请选择</option>
+									        <option v-for="(value,key) in classes.myClasses">{{ value[0]+'-'+value[1] }}</option>
+									      </select>
+									    </div>
+								</div>
+				                <div class="form-group">
+				                        <label for="inputEmail" class="col-lg-3 control-label">请选择文件</label>
+				                        <div class="col-lg-9">
+				                            <input class="form-control" id="file_selected2" type="file" name="file_selected2">
+				                        </div>
+				                </div>
+				                    <div class="modal-footer">
+				                        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+				                        <button type="button" class="btn btn-primary" >上传</button>
+				                    </div>
+				                    <div class="bs-component well well-sm">
+				                        <p style="  ">上传进度： <label id="upload_prog_size">0 / 0 </label> (bytes)</p>
+				                        <div class="progress progress-striped active">
+				                            <div id="upload_prog_bar" class="progress-bar progress-bar-success" style="width: 0%"></div>
+				                            <p id="upload_prog_per">0%</p>
+				                        </div>
+				                    </div>
+				            </form>
+				        </div>
+				    </div>
+				</div>
+
+
+				
+			</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+			<div v-else-if="webtype=='student_login'"> <!--学生登陆成功界面-->
+				<!--上部展示条-->
+				<div class="navbar navbar-default navbar-fixed-top">
+				    <div class="container">
+				        <div class="navbar-header">
+				            <a class="navbar-brand" class="navbar-brand" data-toggle="modal" data-target="#modal_classes_list"
+				               @click="get_classes" >加入课程</a>
+				            <button class="navbar-toggle" type="button" data-toggle="collapse" data-target="#navbar-main">
+				                    <span class="icon-bar"></span>
+				                    <span class="icon-bar"></span>
+				                    <span class="icon-bar"></span>
+				            </button>
+				        </div>
+				        <div class="navbar-collapse collapse" id="navbar-main">
+				            <ul class="nav navbar-nav navbar-right">
+							    <li class="dropdown">
+          							<a class="dropdown-toggle" data-toggle="dropdown"  aria-haspopup="true" aria-expanded="false">{{ user_info.user_name }}<span class="caret"></span></a>
+		          					<ul class="dropdown-menu">
+		            				<li><a href="javascript:void(0)" data-toggle="modal" data-target="#modal_change_passwd">修改密码</a></li>
+		            				<li><a href="javascript:void(0);" @click="log_out">退出登录</a></li>
+		          					</ul>
+        						</li>
+				            </ul>
+				        </div>
+				     </div>
+				</div>
+
+
+				<!--课程列表-->
+				<div class="modal fade" id="modal_classes_list" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+				    <div class="modal-dialog">
+				        <div class="modal-content">
+				            <div class="modal-header">
+				                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				                <h4 class="modal-title" id="myModalLabel">课程列表</h4>
+				            </div>
+				            <form class="form-horizontal">
+				                <div class="modal-body">
+				                    <table class="table table-hover table-bordered table-responsive">
+				                        <thead style="text-align:center">
+				                        	<tr>
+				                            <th width="27%">课程号</th>
+				                            <th width="27%">课程名</th>
+				                            <th width="27%">教师名</th>
+				                            <th width="19%">操作</th>
+				                        	</tr>
+				                        </thead>
+				                            <tbody v-for="(value, key) in classes.allClasses">
+				                            <tr>
+				                                <td style="text-align: center; font-weight:bold;">{{ value[0] }}</td>
+				                                <td style="text-align: center;">{{ value[1] }}</td>
+				                                <td style="text-align:center;">{{ value[2] }}
+				                                <td style="text-align:center;">
+				                                   <a type=button class="btn btn-primary" @click="selectclass(value[0],value[1])">选课</a> 
+				                                </td>
+				                            </tr>
+				                        </tbody>
+				                    </table>
+				                </div>
+				                <div class="modal-footer">
+				                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+				                </div>
+				            </form>
+				        </div>
+				    </div>
+				</div>
+
+
+				<div class="middle">
+					<div style="text-align:left;">
+					<p>说明</p>
+					<p>目前本系统仍处于测试阶段</p>
+					<p>请先选择课程后再进入课程</p>
+					<a href="https://nuaa-pa.gitee.io/gitbook" target=“blank”>课程讲义地址</a>
+					<br><br>
+					</div>
+				    <div  v-if="classes.myClasses.length=='0'">
+				        <p>尚未选择课程</p>
+				    </div>
+				    <div v-else>
+				      <p>当前已选课程</p>
+				        <div>
+				            <table class="table table-hover table-bordered table-responsive">
+				                    <thead style="text-align:center">
+				                    	<tr>
+				                        <th width="20%">课程号</th>
+				                        <th width="20%">课程名</th>
+				                        <th width="20%">教师名</th>
+				                        <th width="20%">退课</th>
+				                        <th width="20%">进入</th>
+				                    	</tr>
+				                    </thead>
+				                    <tbody v-for="(value,key) in classes.myClasses">
+				                        <tr>
+				                            <td style="text-align: center; font-weight:bold;">{{ value[0] }}</td>
+				                            <td style="text-align: center;">{{ value[1] }}</td>
+				                            <td style="text-align:center;">{{ value[2] }}
+				                            <td style="text-align:center;">
+				                                <a type=button class="btn btn-primary" @click="quitclass(value[0],value[1])">退课</a> 
+				                            </td>
+				                            <td style="text-align:center;">
+				                                <a type=button class="btn btn-primary" :href="'index.html?student_class_login&class_id='+value[0]">进入</a> 
+				                            </td>
+				                        </tr>
+				                    </tbody>
+				            </table>
+				        </div>
+				    </div> 
+				</div>
+
+
+			<!--修改密码部分-->
+				<div class="modal fade" id="modal_change_passwd" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+				 aria-hidden="true">
+				    <div class="modal-dialog">
+				        <div class="modal-content">
+				            <div class="modal-header">
+				                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				                <h4 class="modal-title" id="myModalLabel">修改密码</h4>
+				            </div>
+				            <form class="form-horizontal">
+				                <div class="modal-body">
+				                    <div class="form-group">
+				                        <label for="inputEmail" class="col-lg-3 control-label">旧密码</label>
+				                        <div class="col-lg-9">
+				                            <input class="form-control" placeholder="请输入旧密码..." type="password" v-model="passwd.old_passwd" maxlength="9">
+				                        </div>
+				                    </div>
+				                    <div class="form-group">
+				                        <label for="inputEmail" class="col-lg-3 control-label">新密码</label>
+				                        <div class="col-lg-9">
+				                            <input class="form-control" placeholder="请输入新密码..." type="password" v-model="passwd.new_passwd" maxlength="8">
+				                        </div>
+				                    </div>
+				                    <div class="form-group">
+				                        <label for="inputEmail" class="col-lg-3 control-label">确认新密码</label>
+				                        <div class="col-lg-9">
+				                            <input class="form-control" placeholder="再次输入新密码..." type="password" v-model="passwd_confirm" maxlength="16">
+				                        </div>
+				                    </div>
+				                     <p>提示：密码只允许出现大小写字母、数字和下划线。</p>
+				                </div>
+				                <div class="modal-footer">
+				                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+				                    <button type="button" class="btn btn-primary" @click="passwd_change">修改</button>
+				                </div>
+				            </form>
+				        </div>
+				    </div>
+				</div>
+			</div>
+
+
+
+
+
+			<div v-else-if="webtype=='student_class_login'"><!--学生选课后界面-->
+				<nav class="navbar navbar-default">
+				    <!-- Collect the nav links, forms, and other content for toggling -->
+				    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+				      <ul class="nav navbar-nav">
+				        <li>
+				        	<a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">上传<span class="caret"></span></a>
+				        	<ul class="dropdown-menu">
+				            <li><a  href="javascript:void(0)" data-toggle="modal" data-target="#modal_upload" >上传实验</a></li>
+				            <li><a  href="javascript:void(0)" data-toggle="modal" data-target="#modal_repent" >忏悔录</a></li>
+				          </ul>
+				        </li>
+				        <li class="dropdown">
+				            <a  class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">更多<span class="caret"></span></a>
+				          <ul class="dropdown-menu">
+				            <li><a  href="javascript:void(0)" data-toggle="modal" data-target="#modal_grade_query" @click="get_grade">查看成绩</a></li>
+				             <li><a  href="javascript:void(0)" data-toggle="modal" data-target="#modal_work_query" @click="get_work">查看已提交</a></li>
+				            <li><a  href="javascript:void(0)" data-toggle="modal" data-target="#modal_video_query" @click="get_video">在线学习</a></li>
+				            <li><a  href="javascript:void(0)" data-toggle="modal" data-target="#modal_resourse" @click="get_resourse">下载资料</a></li>
+				          </ul>
+				        </li>
+				      </ul>
+				      
+				      <ul class="nav navbar-nav navbar-right">
+				        <li class="dropdown">
+				          <a class="dropdown-toggle" data-toggle="dropdown"  aria-haspopup="true" aria-expanded="false">{{ user_info.user_name }}<span class="caret"></span></a>
+				          <ul class="dropdown-menu">
+				            <li><a href="javascript:void(0)" data-toggle="modal" data-target="#modal_change_passwd">修改密码</a></li>
+				            <li><a href="javascript:void(0)" data-toggle="modal" data-target="#modal_my_class">我的课程</a></li>
+				            <li><a href="https://nuaa-pa.gitee.io/gitbook" target=“blank”>课程讲义</a></li>
+				            <li><a href="javascript:void(0);" @click="log_out">退出登录</a></li>
+				          </ul>
+				        </li>
+				      </ul>
+				    </div><!-- /.navbar-collapse -->
+				</nav>
+
+				<!--各种部件-->
+				<!-- 提交 Modal 开始 -->
+				<div class="modal fade" id="modal_upload" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+				    <div class="modal-dialog">
+				        <div class="modal-content">
+				            <div class="modal-header">
+				                <h4 class="modal-title" id="myModalLabel">作业提交</h4>
+				            </div>
+				            <form class="form-horizontal" enctype="multipart/form-data">
+				                <div class="modal-body">
+				                    <p>请先核对以下提交信息，再提交作业</p>
+				                    <table class="table table-hover table-bordered table-responsive">
+				                        <thead style="text-align: center">
+				                        	<tr>
+				                            <th width="50%">项目</th>
+				                            <th width="50%">值</th>
+				                            </tr>
+				                        </thead>
+				                        <tbody>
+				                            <tr>
+				                                <td style="text-align: right; font-weight:bold;">学号</td>
+				                                <td style="text-align: center;">{{ user_info.user_id }}</td>
+				                            </tr>
+				                            <tr>
+				                                <td style="text-align: right; font-weight:bold;">姓名</td>
+				                                <td style="text-align: center;">{{ user_info.user_name }}</td>
+				                            </tr>
+				                            <tr>
+				                                <td style="text-align: right; font-weight:bold;">提交项目</td>
+				                                <td style="text-align: center;">{{ class_info.class_work_name }}</td>
+				                            </tr>
+				                            <tr>
+				                                <td style="text-align: right; font-weight:bold;">文件大小限制</td>
+				                                <td style="text-align: center;">{{ class_info.class_work_size }} M</td>
+				                            </tr>
+				                            <tr>
+				                                <td style="text-align: right; font-weight:bold;">截止时间</td>
+				                                <td style="text-align: center;">{{ class_info.class_work_deadline }}</td>
+				                            </tr>
+				                        </tbody>
+				                    </table>
+				                    <div class="form-group">
+				                        <label for="inputEmail" class="col-lg-3 control-label">请选择文件</label>
+				                        <div class="col-lg-9">
+				                            <input class="form-control" id="file_selected" type="file" name="file_selected">
+				                        </div>
+				                    </div>
+									<div style="text-align:center;" class="form-group">
+				                    <input type="radio" id="normal" value="normal" v-model="work_upload_info.upload_type">
+                   					<label for="normal">正常提交</label>
+                   					<input type="radio" id="abnormal" value="abnormal" v-model="work_upload_info.upload_type">
+                   					<label for="abnormal">补交通道</label>
+                   					</div>
+				                    <div style="text-align: center;">
+				                        <hr>
+				                        <p>注意：每个作业只能提交一次，请注意确认提交信息，并谨慎选择提交的文件</p>
+				                        <label><input v-model="upload_confirm" type="checkbox">我确认以上提交信息（包括文件命名）无误</label>
+				                    </div>
+				                    <div class="bs-component well well-sm">
+				                        <p style="text-align: center;">上传进度： <label id="upload_prog_size">0 / 0 </label> (bytes)</p>
+				                        <div class="progress progress-striped active">
+				                            <div id="upload_prog_bar" class="progress-bar progress-bar-success" style="width: 0%"></div>
+				                            <p id="upload_prog_per">0%</p>
+				                        </div>
+				                    </div>
+				                </div>
+				                <div class="modal-footer">
+				                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+				                    <button type="button" class="btn btn-primary" @click="upload_file">提交</button>
+				                </div>
+				            </form>
+				        </div>
+				    </div>
+				</div>
+
+			<!-- 忏悔提交 Modal 开始 -->
+				<div class="modal fade" id="modal_repent" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+				    <div class="modal-dialog">
+				        <div class="modal-content">
+				            <div class="modal-header">
+				                <h4 class="modal-title" id="myModalLabel">忏悔提交</h4>
+				            </div>
+				            <form class="form-horizontal" enctype="multipart/form-data">
+				                <div class="modal-body">
+				                    <div class="form-group">
+				                        <label for="inputEmail" class="col-lg-3 control-label">请选择文件</label>
+				                        <div class="col-lg-9">
+				                            <input class="form-control" id="file_selected_repent" type="file" name="file_selected">
+				                        </div>
+				                    </div>
+				                </div>
+				                <div class="modal-footer">
+				                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+				                    <button type="button" class="btn btn-primary" @click="upload_repent">提交</button>
+				                </div>
+				            </form>
+				        </div>
+				    </div>
+				</div>
+
+
+
+				<!--我的课程-->
+				<div class="modal fade" id="modal_my_class" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+				    <div class="modal-dialog">
+				        <div class="modal-content">
+				            <div class="modal-header">
+				                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				                <h4 class="modal-title" id="myModalLabel">我的课程</h4>
+				            </div>
+				           <div>
+						        <div>
+						            <table class="table table-hover table-bordered table-responsive">
+						                    <thead style="text-align:center">
+						                    	<tr>
+						                        <th width="20%">课程号</th>
+						                        <th width="20%">课程名</th>
+						                        <th width="20%">教师名</th>
+						                        <th width="20%">退课</th>
+						                        <th width="20%">进入</th>
+						                    	</tr>
+						                    </thead>
+						                    <tbody v-for="(value,key) in classes.myClasses">
+						                        <tr>
+						                            <td style="text-align: center; font-weight:bold;">{{ value[0] }}</td>
+						                            <td style="text-align: center;">{{ value[1] }}</td>
+						                            <td style="text-align:center;">{{ value[2] }}
+						                            <td style="text-align:center;">
+						                                <a type=button class="btn btn-primary" @click="quitclass(value[0],value[1])">退课</a> 
+						                            </td>
+						                            <td style="text-align:center;">
+						                                <a type=button class="btn btn-primary" :href="'index.html?student_class_login&class_id='+value[0]">进入</a> 
+						                            </td>
+						                        </tr>
+						                    </tbody>
+						            </table>
+						        </div>
+						    </div> 
+				        </div>
+				    </div>
+				</div>
+
+
+
+				<!--查成绩-->
+				<div class="modal fade" id="modal_grade_query" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+				    <div class="modal-dialog">
+				        <div class="modal-content">
+				            <div class="modal-header">
+				                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				                <h4 class="modal-title" id="myModalLabel">成绩查询</h4>
+				            </div>
+				            <form class="form-horizontal">
+				                <div class="modal-body">
+				                    <table class="table table-hover table-bordered table-responsive">
+				                        <thead style="text-align: center">
+				                        <tr>
+				                            <th width="50%">作业名</th>
+				                            <th width="50%">成绩</th>
+				                        </tr>
+				                        </thead>
+				                        <tbody v-for="(value, key) in myGrades">
+				                            <tr>
+				                                <td style="text-align: center; font-weight:bold;">{{ key }}</td>
+				                                <td style="text-align: center;">{{ value }}</td>
+				                            </tr>
+				                        </tbody>
+				                    </table>
+				                </div>
+				                <div class="modal-footer">
+				                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+				                </div>
+				            </form>
+				        </div>
+				    </div>
+				</div>
+
+				<div class="modal fade" id="modal_video_query" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+				    <div class="modal-dialog">
+				        <div class="modal-content">
+				            <div class="modal-header">
+				                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				                <h4 class="modal-title" id="myModalLabel">在线视频</h4>
+				            </div>
+				            <form class="form-horizontal">
+				                <div class="modal-body" >
+				                    <table class="table table-hover table-bordered table-responsive">
+				                        <thead style="text-align: center">
+				                        <tr>
+				                            <th width="100%">视频名</th>
+				                        </tr>
+				                        </thead>
+				                        <tbody v-for="(value, key) in video" :id="key">
+				                        <tr>
+				                                <td style="text-align: center;" >
+				                                <a :href=" 'videoplayer.html?' + '=' + value[1] " target="_blank" >{{ value[0] }}</a>
+				                                </td>
+				                        </tr>
+				                        </tbody>  
+				                    </table> 
+				                </div>
+				                <div class="modal-footer">
+				                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+				                </div>
+				            </form>
+				        </div>
+				    </div>
+				</div>
+
+				<div class="modal fade" id="modal_resourse" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+				    <div class="modal-dialog">
+				        <div class="modal-content">
+				            <div class="modal-header">
+				                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				                <h4 class="modal-title" id="myModalLabel">下载资料</h4>
+				            </div>
+				            <form class="form-horizontal">
+				                <div class="modal-body" >
+				                    <table class="table table-hover table-bordered table-responsive">
+				                        <thead style="text-align: center">
+				                        <tr>
+				                            <th width="100%">资源名</th>
+				                        </tr>
+				                        </thead>
+				                        <tbody v-for="(value, key) in file" >
+				                        <tr>
+				                                <td style="text-align: center;" >
+				                                <a @click="download(value[1])" >{{ value[0] }}</a>
+				                                </td>
+				                        </tr>
+				                        </tbody>  
+				                    </table> 
+				                </div>
+				                <div class="modal-footer">
+				                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+				                </div>
+				            </form>
+				        </div>
+				    </div>
+				</div>
+
+
+				<!--查看已提交的作业-->
+				<div class="modal fade" id="modal_work_query" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+				    <div class="modal-dialog">
+				        <div class="modal-content">
+				            <div class="modal-header">
+				                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				                <h4 class="modal-title" id="myModalLabel">作业查询</h4>
+				            </div>
+				            <form class="form-horizontal">
+				                <div class="modal-body">
+				                    <table class="table table-hover table-bordered table-responsive">
+				                        <thead style="text-align: center">
+				                        <tr>
+				                            <th width="50%">作业名</th>
+				                            <th width="50%">上传时间</th>
+				                        </tr>
+				                        </thead>
+				                        <tbody v-for="(value, key) in mySubmitList">
+				                            <tr>
+				                                <td style="text-align: center; font-weight:bold;">{{ value[0] }}</td>
+				                                <td style="text-align: center;">{{ value[1] }}</td>
+				                            </tr>
+				                        </tbody>
+				                    </table>
+				                </div>
+				                <div class="modal-footer">
+				                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+				                </div>
+				            </form>
+				        </div>
+				    </div>
+				</div>
+
+				<!--修改密码部分-->
+				<div class="modal fade" id="modal_change_passwd" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+				 aria-hidden="true">
+				    <div class="modal-dialog">
+				        <div class="modal-content">
+				            <div class="modal-header">
+				                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				                <h4 class="modal-title" id="myModalLabel">修改密码</h4>
+				            </div>
+				            <form class="form-horizontal">
+				                <div class="modal-body">
+				                    <div class="form-group">
+				                        <label for="inputEmail" class="col-lg-3 control-label">旧密码</label>
+				                        <div class="col-lg-9">
+				                            <input class="form-control" placeholder="请输入旧密码..." type="password" v-model="passwd.old_passwd" maxlength="9">
+				                        </div>
+				                    </div>
+				                    <div class="form-group">
+				                        <label for="inputEmail" class="col-lg-3 control-label">新密码</label>
+				                        <div class="col-lg-9">
+				                            <input class="form-control" placeholder="请输入新密码..." type="password" v-model="passwd.new_passwd" maxlength="8">
+				                        </div>
+				                    </div>
+				                    <div class="form-group">
+				                        <label for="inputEmail" class="col-lg-3 control-label">确认新密码</label>
+				                        <div class="col-lg-9">
+				                            <input class="form-control" placeholder="再次输入新密码..." type="password" v-model="passwd_confirm" maxlength="16">
+				                        </div>
+				                    </div>
+				                     <p>提示：密码只允许出现大小写字母、数字和下划线。</p>
+				                </div>
+				                <div class="modal-footer">
+				                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+				                    <button type="button" class="btn btn-primary" @click="passwd_change">修改</button>
+				                </div>
+				            </form>
+				        </div>
+				    </div>
+				</div>
+
+
+				<!--开始主体部分-->
+				<div  class="middle">
+					  <div style="text-align:left">
+					  <p>提交说明</p>
+					  <li>未到补交时间会无法选择补交通道，只有在特定的时间段内可以选择补交通道.</li>
+					  <li>提交后作业会自动的进行更名和保存，所以可以不考虑自行修改名字.</li>
+					  <li>建议对文件进行良好保存，以免系统出问题.</li>
+					  <br><br><br>
+					  </div>
+					  <div style="text-align:left">
+					  <p>当前课程作业</p>
+					  <li>名称:        {{ class_info.class_work_name }}</li>
+					  <li>deadline:    {{ class_info.class_work_deadline }}</li>
+					  <br><br><br>
+					  </div>
+					  <div style="text-align:left;" v-if="class_info.class_note!=null">
+					  <h5>通知</h5>
+					  <p >{{ class_info.class_note }}</p>
+					  </div>
+				</div>
+
+
+			</div>
+
+
+
+			<div v-else-if="webtype=='quiz'"> <!--在线做题-->
+				<p>666</p>
+			</div>
+
+
+
+
+
+			<div v-else><!--其他页面-->
+				<p class='middle'>哦，你好像进入了神奇的空间~</p>
+			</div>
+
+
+
+
+
+			
+        </div>
+    <script src="js/index.js"></script>
+    <script src="js/jquery-2.1.3.min.js"></script>
+	<script src="js/bootstrap.min.js"></script>
+    </body>
+</html>
