@@ -133,7 +133,7 @@
 				                    <div class="form-group">
 				                        <label for="inputEmail" class="col-lg-3 control-label">班级</label>
 				                        <div class="col-lg-9">
-				                            <input class="form-control" placeholder="请输入班级..." type="text"  maxlength="7" v-model="register_data.user_class">
+				                            <input class="form-control" placeholder="请输入班级...(例如1618201/重修)" type="text"  maxlength="7" v-model="register_data.user_class">
 				                        </div>
 				                    </div>
 				                    <div class="form-group">
@@ -198,8 +198,8 @@
 				          <ul class="dropdown-menu" >
 				            <li><a  href="javascript:void(0)" data-toggle="modal" data-target="#modal_new_note" >发布新公告</a></li>
 				            <li><a  href="javascript:void(0)" data-toggle="modal" data-target="#modal_new_work" >发布新作业</a></li>
-				            <li><a  href="javascript:void(0)" data-toggle="modal" data-target="#modal_upload_resourse" >上传资源</a></li>
-				            <li><a  href="javascript:void(0)" data-toggle="modal" data-target="#modal_upload_grade">上传成绩</a></li>
+				<!--            <li><a  href="javascript:void(0)" data-toggle="modal" data-target="#modal_upload_resourse" >上传资源</a></li>
+				            <li><a  href="javascript:void(0)" data-toggle="modal" data-target="#modal_upload_grade">上传成绩</a></li> -->
 				          </ul>
 				        </li>
 				      </ul>
@@ -208,6 +208,7 @@
 				          <a class="dropdown-toggle" data-toggle="dropdown"  aria-haspopup="true" aria-expanded="false">{{ user_info.user_name }}<span class="caret"></span></a>
 				          <ul class="dropdown-menu">
 				            <li role="separator" class="divider"></li>
+					    <li><a  href="mailto:nuaaxz18@nuaa.edu.cn">提交bug</a></li>
 				            <li><a href="javascript:void(0);" id="log_out" @click="log_out">退出登录</a></li>
 				          </ul>
 				        </li>
@@ -232,7 +233,7 @@
 				                        <th width="20%">课程名</th>
 				                        <th width="20%">选课人数</th>
 				                        <th width="20%">当前作业名</th>
-				                        <th width="20%">当前作业已提交人数</th>
+				             <!--           <th width="20%">当前作业已提交人数</th>-->
 				                        <th width="20%">下载作业</th>
 				                        <th width="20%">下载忏悔</th>
 				                    	</tr>
@@ -243,7 +244,7 @@
 				                            <td style="text-align: center;">{{ value[1] }}</td>
 				                            <td style="text-align:center;">{{ value[2] }}</td>
 				                            <td style="text-align:center;">{{ value[4] }}</td>
-				                            <td style="text-align:center;">{{ value[3] }}</td>
+				                 <!--           <td style="text-align:center;">{{ value[3] }}</td>  -->
 				                            <td style="text-align:center;">
 				                                <a type=button class="btn btn-primary" @click="download(value[0],value[4],1)">下载</a> 
 				                            </td>
@@ -316,20 +317,49 @@
 				                    <div class="form-group">
 				                        <label for="inputEmail" class="col-lg-3 control-label">作业名</label>
 				                        <div class="col-lg-9">
-				                            <input class="form-control" placeholder="请输入作业名..." type="text" v-model="class_info.class_work_name" maxlength="9">
+				                            <input class="form-control" placeholder="请输入作业名..." type="text" v-model="class_info.class_work_name" maxlength="100">
 				                        </div>
 				                    </div>
-				              <!--      <div class="form-group">
-				                        <label for="inputEmail" class="col-lg-3 control-label">作业文件类型</label>
+				                    <div class="form-group">
+				                        <label for="inputEmail" class="col-lg-3 control-label">作业名格式</label>
 				                        <div class="col-lg-9">
-				                            <input class="form-control" placeholder="请输入作业文件类型..." type="text"  maxlength="9" v-model="class_info.class_work_type">
+				                            <input class="form-control" placeholder="请输入自定义格式" type="text" v-model="class_info.class_work_name_form" maxlength="100">
+				                            <p>$i->学号,$s->学生名,$f->作业名</p>
 				                        </div>
-				                    </div>-->
+
+				                    </div>
+				                    <div class="form-group">
+				                        <label for="inputEmail" class="col-lg-3 control-label">添加作业类型</label>
+				                        <div class="col-lg-9">
+				                            <input class="form-control" placeholder="请输入作业文件类型数..." type="text"  maxlength="9" v-model="class_type_number">
+				                        </div>
+				                    </div>
+				                    <div v-if="class_type_number!=0">
+				                    	<div v-for="(key,value) in class_type_number_int">
+				                    		<div class="form-group">
+						                        <label for="inputEmail" class="col-lg-3 control-label">作业类型</label>
+						                        <div class="col-lg-9">
+						                            <input class="form-control" placeholder="请输入作业类型... " type="text"  maxlength="9" v-model="class_info.class_work_type[key]">
+						                        </div>				                        
+						                    </div>
+						                    <div class="form-group">
+						                        <label  class="col-lg-3 control-label">是否分班级存储</label>
+						                        <div class="col-lg-9">
+						                        	<select  class="form-control"  v-model="class_info.class_work_file_type[key]">
+											        <option  disabled value="">请选择</option>
+											        <option  >是</option>
+											        <option  >否</option>
+											      </select>
+											    </div>
+						                    </div>
+				                    	</div>
+				                    </div>
+									
 				                    <div class="form-group">
 				                        <label for="inputEmail" class="col-lg-3 control-label">作业大小(M)</label>
 				                        <div class="col-lg-9">
 				                            <input class="form-control" placeholder="请输入作业大小..." type="text"  maxlength="9" v-model="class_info.class_work_size">
-				                        </div>
+				                        </div>				                        
 				                    </div>
 				                    <div class="form-group">
 				                        <label for="inputEmail" class="col-lg-3 control-label">截止日期</label>
@@ -508,6 +538,7 @@
           							<a class="dropdown-toggle" data-toggle="dropdown"  aria-haspopup="true" aria-expanded="false">{{ user_info.user_name }}<span class="caret"></span></a>
 		          					<ul class="dropdown-menu">
 		            				<li><a href="javascript:void(0)" data-toggle="modal" data-target="#modal_change_passwd">修改密码</a></li>
+									<li><a  href="mailto:nuaaxz18@nuaa.edu.cn">提交bug</a></li>
 		            				<li><a href="javascript:void(0);" @click="log_out">退出登录</a></li>
 		          					</ul>
         						</li>
@@ -564,6 +595,10 @@
 					<p>请先选择课程后再进入课程</p>
 					<a href="https://nuaa-pa.gitee.io/gitbook" target=“blank”>课程讲义地址</a>
 					<br><br>
+
+					<a href="https://wws.lanzous.com/i3Y8jdc825a" target=“blank”>实验文件下载</a>
+
+					<br><br>
 					</div>
 				    <div  v-if="classes.myClasses.length=='0'">
 				        <p>尚未选择课程</p>
@@ -614,13 +649,13 @@
 				                    <div class="form-group">
 				                        <label for="inputEmail" class="col-lg-3 control-label">旧密码</label>
 				                        <div class="col-lg-9">
-				                            <input class="form-control" placeholder="请输入旧密码..." type="password" v-model="passwd.old_passwd" maxlength="9">
+				                            <input class="form-control" placeholder="请输入旧密码..." type="password" v-model="passwd.old_passwd" maxlength="16">
 				                        </div>
 				                    </div>
 				                    <div class="form-group">
 				                        <label for="inputEmail" class="col-lg-3 control-label">新密码</label>
 				                        <div class="col-lg-9">
-				                            <input class="form-control" placeholder="请输入新密码..." type="password" v-model="passwd.new_passwd" maxlength="8">
+				                            <input class="form-control" placeholder="请输入新密码..." type="password" v-model="passwd.new_passwd" maxlength="16">
 				                        </div>
 				                    </div>
 				                    <div class="form-group">
@@ -653,17 +688,19 @@
 				        <li>
 				        	<a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">上传<span class="caret"></span></a>
 				        	<ul class="dropdown-menu">
-				            <li><a  href="javascript:void(0)" data-toggle="modal" data-target="#modal_upload" >上传实验</a></li>
+				            <li><a  href="javascript:void(0)" data-toggle="modal" data-target="#modal_upload" @click="get_time">上传实验</a></li>
 				            <li><a  href="javascript:void(0)" data-toggle="modal" data-target="#modal_repent" >忏悔录</a></li>
 				          </ul>
 				        </li>
 				        <li class="dropdown">
 				            <a  class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">更多<span class="caret"></span></a>
 				          <ul class="dropdown-menu">
-				            <li><a  href="javascript:void(0)" data-toggle="modal" data-target="#modal_grade_query" @click="get_grade">查看成绩</a></li>
+				       <!--     <li><a  href="javascript:void(0)" data-toggle="modal" data-target="#modal_grade_query" @click="get_grade">查看成绩</a></li> -->
 				             <li><a  href="javascript:void(0)" data-toggle="modal" data-target="#modal_work_query" @click="get_work">查看已提交</a></li>
-				            <li><a  href="javascript:void(0)" data-toggle="modal" data-target="#modal_video_query" @click="get_video">在线学习</a></li>
-				            <li><a  href="javascript:void(0)" data-toggle="modal" data-target="#modal_resourse" @click="get_resourse">下载资料</a></li>
+				             <li v-for="(value,key) in class_info.class_work_type"  v-if="value!='md'"><a  href="javascript:void(0)" @click="get_my_work(value,0)">查看本次实验({{ value }})</a></li>
+					     <li v-for="(value,key) in class_info.class_work_type"  v-if="value!='md'"><a  href="javascript:void(0)" @click="get_my_work(value,1)">查看本次补交实验({{ value }})</a></li>
+				      <!--     <li><a  href="javascript:void(0)" data-toggle="modal" data-target="#modal_video_query" @click="get_video">在线学习</a></li>
+				            <li><a  href="javascript:void(0)" data-toggle="modal" data-target="#modal_resourse" @click="get_resourse">下载资料</a></li>  -->
 				          </ul>
 				        </li>
 				      </ul>
@@ -673,6 +710,7 @@
 				          <a class="dropdown-toggle" data-toggle="dropdown"  aria-haspopup="true" aria-expanded="false">{{ user_info.user_name }}<span class="caret"></span></a>
 				          <ul class="dropdown-menu">
 				            <li><a href="javascript:void(0)" data-toggle="modal" data-target="#modal_change_passwd">修改密码</a></li>
+					    	<li><a href="mailto:nuaaxz18@nuaa.edu.cn">提交bug</a></li>
 				            <li><a href="javascript:void(0)" data-toggle="modal" data-target="#modal_my_class">我的课程</a></li>
 				            <li><a href="https://nuaa-pa.gitee.io/gitbook" target=“blank”>课程讲义</a></li>
 				            <li><a href="javascript:void(0);" @click="log_out">退出登录</a></li>
@@ -714,6 +752,10 @@
 				                                <td style="text-align: center;">{{ class_info.class_work_name }}</td>
 				                            </tr>
 				                            <tr>
+				                                <td style="text-align: right; font-weight:bold;">作业类型</td>
+				                                <td style="text-align: center;">{{ class_work_type_str }}</td>
+				                            </tr>
+				                            <tr>
 				                                <td style="text-align: right; font-weight:bold;">文件大小限制</td>
 				                                <td style="text-align: center;">{{ class_info.class_work_size }} M</td>
 				                            </tr>
@@ -729,16 +771,11 @@
 				                            <input class="form-control" id="file_selected" type="file" name="file_selected">
 				                        </div>
 				                    </div>
-									<div style="text-align:center;" class="form-group">
-				                    <input type="radio" id="normal" value="normal" v-model="work_upload_info.upload_type">
-                   					<label for="normal">正常提交</label>
-                   					<input type="radio" id="abnormal" value="abnormal" v-model="work_upload_info.upload_type">
-                   					<label for="abnormal">补交通道</label>
-                   					</div>
 				                    <div style="text-align: center;">
 				                        <hr>
-				                        <p>注意：每个作业只能提交一次，请注意确认提交信息，并谨慎选择提交的文件</p>
-				                        <label><input v-model="upload_confirm" type="checkbox">我确认以上提交信息（包括文件命名）无误</label>
+				                        <p>注意：每次只能提交一个文件</p>
+										<p>考虑到可能会传错文件,所以允许多次提交,且每次提交会覆盖上次的文件</p>
+				                        <label><input v-model="upload_confirm" type="checkbox">我确认以上提交信息无误</label>
 				                    </div>
 				                    <div class="bs-component well well-sm">
 				                        <p style="text-align: center;">上传进度： <label id="upload_prog_size">0 / 0 </label> (bytes)</p>
@@ -1005,12 +1042,15 @@
 					  <li>未到补交时间会无法选择补交通道，只有在特定的时间段内可以选择补交通道.</li>
 					  <li>提交后作业会自动的进行更名和保存，所以可以不考虑自行修改名字.</li>
 					  <li>建议对文件进行良好保存，以免系统出问题.</li>
+					  <li>每次只能提交一个文件</li>
+					  <li>可多次提交,每次提交会覆盖掉上一次提交的文件</li>
 					  <br><br><br>
 					  </div>
 					  <div style="text-align:left">
 					  <p>当前课程作业</p>
 					  <li>名称:        {{ class_info.class_work_name }}</li>
 					  <li>deadline:    {{ class_info.class_work_deadline }}</li>
+					  <li>文件类型:    {{ class_work_type_str }}</li>
 					  <br><br><br>
 					  </div>
 					  <div style="text-align:left;" v-if="class_info.class_note!=null">
